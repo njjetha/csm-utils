@@ -64,7 +64,7 @@ configure_ipaddress() {
     interval=0.2 # seconds
     elapsed=0
 
-    debug_node="/sys/bus/mhi/devices/mhi$1_CSM_CTRL/debug_transport"
+    debug_node="/sys/bus/mhi/devices/mhi$1_CSM_CTRL/transport_mode"
     while (( $(echo "$elapsed < $timeout" | bc -l) )); do
         if [ -f "$debug_node" ]; then
                 echo "$debug_transport" > "$debug_node"

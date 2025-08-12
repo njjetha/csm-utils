@@ -19,6 +19,12 @@ ddr_training_to_firmware_system() {
     # Path for output file name
     OUTPUT_FILE=$LASSEN_DEVICE_FOLDER/mdmddr_${serialno}.mbn
 
+    # Check if serial number specific file exists.
+    if [ -f "$OUTPUT_FILE" ]; then
+	    echo "Training data  file exists: $OUTPUT_FILE"
+	    exit 1
+    fi
+
     # Create target directory if it doesn't exist
     mkdir -p "$LASSEN_DEVICE_FOLDER"
 
