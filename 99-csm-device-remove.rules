@@ -1,1 +1,1 @@
-SUBSYSTEM=="mhi", ACTION=="remove", KERNEL=="mhi[0-9]*_CSM_CTRL", RUN+="/etc/csm-nbdkit-stop.sh %k"
+SUBSYSTEM=="mhi", ACTION=="remove", KERNEL=="mhi[0-9]*_CSM_CTRL", RUN+="/usr/bin/csm-nbdkit-stop.sh %k"
