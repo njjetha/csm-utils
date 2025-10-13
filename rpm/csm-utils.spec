@@ -32,6 +32,7 @@ install -m 755 csm-utils/decimal-to-hex.sh $RPM_BUILD_ROOT%{_bindir}/decimal-to-
 install -m 644 csm-utils/99-mhi-csm-ctrl-device.rules $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d
 install -m 644 csm-utils/99-csm-device-remove.rules $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d
 install -m 755 csm-utils/csm-check-repair.sh $RPM_BUILD_ROOT%{_bindir}/csm-check-repair.sh
+install -m 755 csm-utils/csm-event-handler.sh $RPM_BUILD_ROOT%{_bindir}/csm-event-handler.sh
 
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
@@ -41,6 +42,7 @@ install -m 755 csm-utils/csm-check-repair.sh $RPM_BUILD_ROOT%{_bindir}/csm-check
 %{_bindir}/csm-nbdkit-stop.sh
 %{_bindir}/csm-configure-ip.sh
 %{_bindir}/csm-check-repair.sh
+%{_bindir}/csm-event-handler.sh
 %{_bindir}/csm-store-ddr.sh
 %{_bindir}/decimal-to-hex.sh
 %{_sysconfdir}/systemd/system/csm-nbdkit@.service

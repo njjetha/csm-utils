@@ -49,34 +49,6 @@ configure_ipaddress() {
     MPLANE_ADDR="192.200.103.$1"
     echo "configure interface $MPLANE_INTERFACE $OAM_HOST_ADDR $MPLANE_ADDR"
     config_interface $MPLANE_INTERFACE $OAM_HOST_ADDR $MPLANE_ADDR
-
-    # get debug transport config
-    decimal_serial=$(cat /sys/bus/mhi/devices/mhi$1/serial_number | cut -d " " -f3)
-    serialno=$(convert_serial_to_hex "$decimal_serial")
-    LASSEN_DEVICE_FOLDER=/lib/firmware/qcom/qdu100/$serialno
-    if [ -f $LASSEN_DEVICE_FOLDER/debug_transport.conf ]; then
-        debug_transport=$(cat $LASSEN_DEVICE_FOLDER/debug_transport.conf)
-    else
-        debug_transport="pcie"
-    fi
-
-    timeout=10   # seconds
-    interval=0.2 # seconds
-    elapsed=0
-
-    debug_node="/sys/bus/mhi/devices/mhi$1_CSM_CTRL/transport_mode"
-    while (( $(echo "$elapsed < $timeout" | bc -l) )); do
-        if [ -f "$debug_node" ]; then
-                echo "$debug_transport" > "$debug_node"
-                echo "Copied $debug_transport to $debug_node"
-                return 0
-        fi
-        sleep $interval
-        elapsed=$(echo "$elapsed + $interval" | bc)
-    done
-
-    echo "Destination file $debug_node not found after $timeout seconds."
-    return 1
 }
 
 # Udev rule triggers csm_nbdkit service with SAHARA channel as argument when Device detected on PCIe channel at boot
