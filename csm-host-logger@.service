@@ -1,0 +1,9 @@
+[Unit]
+Description=Host log Collector
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/csm-host-logger.sh %i
+
+[Install]
+WantedBy=multi-user.target

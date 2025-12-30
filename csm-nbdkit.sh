@@ -8,6 +8,19 @@
 source /usr/bin/csm-check-repair.sh
 source /usr/bin/decimal-to-hex.sh
 
+set_debug_transport() {
+    LASSEN_DEVICE_FOLDER=$1
+    if [ -f $LASSEN_DEVICE_FOLDER/debug_transport.conf ]; then
+        debug_transport=$(cat $LASSEN_DEVICE_FOLDER/debug_transport.conf)
+    else
+        debug_transport="pcie"
+    fi
+    mnt_data_dir="/tmp/data.$serialno"
+    mkdir -p $mnt_data_dir
+    mount $LASSEN_DEVICE_FOLDER/userdata.img.raw $mnt_data_dir
+    echo -n $debug_transport > $mnt_data_dir/debug_transport.conf
+    umount $mnt_data_dir
+}
 # transfer images via qsahara channel for the x100 card connected PCIe card via channel no#
 # @1:  MHI Channel no
 
@@ -16,17 +29,20 @@ sync_device_firmware_image () {
     decimal_serial=$(cat /sys/bus/mhi/devices/mhi$1/serial_number | cut -d " " -f3)
     serialno=$(convert_serial_to_hex "$decimal_serial")
     CRASH_DUMP_FOLDER=/local/mnt/crash/$serialno
-    mkdir -p -m 777 $CRASH_DUMP_FOLDER
+    mkdir -p -m 644 $CRASH_DUMP_FOLDER
     LASSEN_RAW_IMG_FOLDER=$LASSEN_FW_FOLDER/flatimg/
     LASSEN_DEVICE_FOLDER=$LASSEN_FW_FOLDER/$serialno
     #create device folder to copy individual device file system if not found
     # it saves previous loaded filesystem.
     # To clean up remove entire flatimg* folders from x12 manually
     if [ ! -d $LASSEN_DEVICE_FOLDER ]; then
-        mkdir -m 777 $LASSEN_DEVICE_FOLDER
+        mkdir -m 644 $LASSEN_DEVICE_FOLDER
         rsync -av $LASSEN_RAW_IMG_FOLDER $LASSEN_DEVICE_FOLDER
     fi
     echo "sync_device_firmware_image completed for $serialno"
+
+    echo "setting up debug transport..."
+    set_debug_transport $LASSEN_DEVICE_FOLDER
 }
 
 # Trigger nbdkit command for the x100 card connected PCIe card #

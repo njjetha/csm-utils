@@ -15,4 +15,7 @@ else
     echo "csm-event: $DEVICE: starting csm-configure-ip service for CSM_CTRL" > /dev/kmsg
     systemd-run --no-block systemctl restart csm-configure-ip@"$DEVICE".service &
     echo "csm-event: $DEVICE: csm-configure-ip service completed with status:$?" > /dev/kmsg
+    echo "csm-event: $DEVICE: starting csm-device-health service for CSM_CTRL" > /dev/kmsg
+    systemd-run --no-block systemctl restart csm-device-health@"$DEVICE".service &
+    echo "csm-event: $DEVICE: csm-device-health service completed with status:$?" > /dev/kmsg
 fi
