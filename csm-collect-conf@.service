@@ -1,0 +1,9 @@
+[Unit]
+Description=Backup conf on Host
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/csm-collect-conf.sh %i
+
+[Install]
+WantedBy=multi-user.target

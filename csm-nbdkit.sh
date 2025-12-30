@@ -29,14 +29,14 @@ sync_device_firmware_image () {
     decimal_serial=$(cat /sys/bus/mhi/devices/mhi$1/serial_number | cut -d " " -f3)
     serialno=$(convert_serial_to_hex "$decimal_serial")
     CRASH_DUMP_FOLDER=/local/mnt/crash/$serialno
-    mkdir -p -m 777 $CRASH_DUMP_FOLDER
+    mkdir -p -m 644 $CRASH_DUMP_FOLDER
     LASSEN_RAW_IMG_FOLDER=$LASSEN_FW_FOLDER/flatimg/
     LASSEN_DEVICE_FOLDER=$LASSEN_FW_FOLDER/$serialno
     #create device folder to copy individual device file system if not found
     # it saves previous loaded filesystem.
     # To clean up remove entire flatimg* folders from x12 manually
     if [ ! -d $LASSEN_DEVICE_FOLDER ]; then
-        mkdir -m 777 $LASSEN_DEVICE_FOLDER
+        mkdir -m 644 $LASSEN_DEVICE_FOLDER
         rsync -av $LASSEN_RAW_IMG_FOLDER $LASSEN_DEVICE_FOLDER
     fi
     echo "sync_device_firmware_image completed for $serialno"

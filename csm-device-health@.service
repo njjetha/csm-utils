@@ -1,0 +1,12 @@
+[Unit]
+Description=Run csm device health service
+After=csm-configure-ip@.service
+Requires=csm-configure-ip@.service
+
+[Service]
+Type=oneshot
+Group=root
+ExecStart=/usr/bin/csm-device-health.sh %I
+
+[Install]
+WantedBy=multi-user.target

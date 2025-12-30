@@ -1,0 +1,9 @@
+[Unit]
+Description=Host Logger Timer
+
+[Timer]
+OnActiveSec=5min
+Unit=csm-host-logger@%i.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Backup conf timer
+
+[Timer]
+OnCalendar=*:0/10
+Unit=csm-collect-conf@%i.service
+
+[Install]
+WantedBy=timers.target
