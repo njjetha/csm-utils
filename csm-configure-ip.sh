@@ -37,14 +37,24 @@ config_interface()
 # @1:  MHI Channel no
 #
 configure_ipaddress() {
-    SWIP0_LOCAL_INTERFACE="mhi$1_IP_SW0"
+    if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+        echo "Error: channel number must be a non-negative."
+        exit 2
+    fi
+
+    local channel=$1
+    local base=$(( channel * 2 ))
+    SWIP0_LOCAL_INTERFACE="mhi_swip${base}"
+    MPLANE_INTERFACE="mhi_swip$(( base + 1 ))"
+    echo "Host MHI interface name   --> $SWIP0_LOCAL_INTERFACE"
+    echo "Mplane MHI interface name --> $MPLANE_INTERFACE"
+
     SWIP0_LOCAL_ADDR="192.200.100.$1"
     SWIP0_REMOTE_ADDR="192.200.101.$1"
     echo "configure interface $SWIP0_LOCAL_INTERFACE $SWIP0_LOCAL_ADDR $SWIP0_REMOTE_ADDR"
     config_interface $SWIP0_LOCAL_INTERFACE $SWIP0_LOCAL_ADDR $SWIP0_REMOTE_ADDR
 
     # Configure mhi_swipe1 interface for QDU Mplane App - OEM OAM App
-    MPLANE_INTERFACE="mhi$1_IP_SW1"
     OAM_HOST_ADDR="192.200.102.$1"
     MPLANE_ADDR="192.200.103.$1"
     echo "configure interface $MPLANE_INTERFACE $OAM_HOST_ADDR $MPLANE_ADDR"
